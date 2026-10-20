@@ -51,3 +51,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local project memory (assistant-maintained, never commit)
+PROJECT_MEMORY.md

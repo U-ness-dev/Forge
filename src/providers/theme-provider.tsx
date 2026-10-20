@@ -31,6 +31,14 @@ function getSystemTheme(): "light" | "dark" {
     : "light"
 }
 
+function getCookie(name: string): Theme | null {
+  const match = document.cookie.match(new RegExp(`(?:^|;\\s*)${name}=([^;]+)`))
+  const value = match ? decodeURIComponent(match[1]) : null
+  return value === "light" || value === "dark" || value === "system"
+    ? value
+    : null
+}
+
 function applyTheme(resolved: "light" | "dark") {
   const root = document.documentElement
   if (resolved === "dark") {
@@ -49,8 +57,16 @@ export default function ThemeProvider({
 }) {
   const [theme, setThemeState] = useState<Theme>(initialTheme)
   const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">(
-    initialTheme === "system" ? getSystemTheme() : initialTheme
+    initialTheme === "system" ? "light" : initialTheme
   )
+
+  useEffect(() => {
+    const saved = getCookie("theme")
+    if (saved && saved !== theme) {
+      setThemeState(saved)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
