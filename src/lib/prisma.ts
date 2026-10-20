@@ -1,17 +1,25 @@
 import { PrismaClient } from "@prisma/client"
-import { Pool } from "pg"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3"
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined
 }
 
-function createPrismaClient() {
-  const pool = new Pool({ connectionString: process.env.DATABASE_URL })
-  const adapter = new PrismaPg(pool)
-  return new PrismaClient({ adapter })
+let cachedUrl: string | null = null
+
+function getDbUrl() {
+  if (cachedUrl) return cachedUrl
+  cachedUrl = process.env.DATABASE_URL || "file:./forge.db"
+  return cachedUrl
 }
 
-export const prisma = globalForPrisma.prisma ?? createPrismaClient()
+export function getPrisma() {
+  if (!globalForPrisma.prisma) {
+    const url = getDbUrl()
+    const adapter = new PrismaBetterSqlite3({ url })
+    globalForPrisma.prisma = new PrismaClient({ adapter })
+  }
+  return globalForPrisma.prisma
+}
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma
+export const prisma = getPrisma()

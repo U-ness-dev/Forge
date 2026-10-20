@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
 }
 
 model User {
@@ -56,54 +56,28 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-enum ProjectStatus {
-  Idea
-  Research
-  Planning
-  Design
-  Development
-  Testing
-  Finished
-}
-
-enum ProjectCategory {
-  Website
-  MobileApp
-  DesktopApp
-  Branding
-  Logo
-  Game
-  BlenderProject
-  ThreeDScene
-  MotionDesign
-  Poster
-  Video
-  Animation
-  Other
-}
-
 model Project {
-  id          String          @id @default(cuid())
-  title       String
-  description String?
-  category    ProjectCategory
-  status      ProjectStatus   @default(Idea)
+  id           String  @id @default(cuid())
+  title        String
+  description  String?
+  category     String
+  status       String  @default("Idea")
   technologies String?
-  tags        String?
-  coverImage  String?
-  progress    Int             @default(0)
-  isFavorite  Boolean         @default(false)
-  userId      String
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
+  tags         String?
+  coverImage   String?
+  progress     Int     @default(0)
+  isFavorite   Boolean @default(false)
+  userId       String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  favorites   Favorite[]
-  notes       Note[]
-  chats       Chat[]
-  uploads     Upload[]
-  tasks       Task[]
-  timeline    TimelineEvent[]
+  user       User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  favorites  Favorite[]
+  notes      Note[]
+  chats      Chat[]
+  uploads    Upload[]
+  tasks      Task[]
+  timeline   TimelineEvent[]
 }
 
 model Favorite {
@@ -129,22 +103,15 @@ model Note {
 }
 
 model Chat {
-  id        String       @id @default(cuid())
+  id        String   @id @default(cuid())
   title     String?
-  mode      ChatMode     @default(Brainstorm)
+  mode      String   @default("Brainstorm")
   projectId String
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   project  Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
   messages ChatMessage[]
-}
-
-enum ChatMode {
-  Brainstorm
-  Planning
-  Feedback
-  Reflection
 }
 
 model ChatMessage {
@@ -170,24 +137,17 @@ model Upload {
 }
 
 model Task {
-  id          String       @id @default(cuid())
+  id          String   @id @default(cuid())
   title       String
   description String?
-  priority    TaskPriority @default(Medium)
+  priority    String   @default("Medium")
   deadline    DateTime?
-  completed   Boolean      @default(false)
+  completed   Boolean  @default(false)
   projectId   String
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
-}
-
-enum TaskPriority {
-  Low
-  Medium
-  High
-  Critical
 }
 
 model TimelineEvent {

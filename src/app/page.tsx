@@ -1,4 +1,6 @@
 import Link from "next/link"
+import { redirect } from "next/navigation"
+import { auth } from "@/lib/auth"
 import { Sparkles, ArrowRight, Lightbulb, Route, MessageSquare, Clock } from "lucide-react"
 
 const features = [
@@ -24,7 +26,11 @@ const features = [
   },
 ]
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  const session = await auth()
+  if (session?.user) {
+    redirect("/dashboard")
+  }
   return (
     <div className="flex min-h-screen flex-col bg-[#0a0a0a]">
       <header className="fixed inset-x-0 top-0 z-50 border-b border-white/[0.06] bg-[#0a0a0a]/80 backdrop-blur-xl">

@@ -7,14 +7,13 @@ import { Heart, HeartOff, Clock, ArrowUpRight } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { cn, formatRelativeDate } from "@/lib/utils"
 import { PROJECT_CATEGORIES, PROJECT_STATUSES } from "@/types"
-import type { ProjectCategory, ProjectStatus } from "@/types"
 
-interface ProjectCardProject {
+export interface ProjectCardProject {
   id: string
   title: string
   description: string | null
-  category: ProjectCategory
-  status: ProjectStatus
+  category: string
+  status: string
   coverImage: string | null
   progress: number
   isFavorite: boolean

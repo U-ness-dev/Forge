@@ -25,14 +25,14 @@ import { PROJECT_CATEGORIES, PROJECT_STATUSES } from "@/types"
 import { ProjectTasks } from "@/components/projects/project-tasks"
 import { ProjectUploads } from "@/components/projects/project-uploads"
 import { ProjectTimeline } from "@/components/projects/project-timeline"
-import type { ProjectCategory, ProjectStatus } from "@/types"
+
 
 interface ProjectData {
   id: string
   title: string
   description: string | null
-  category: ProjectCategory
-  status: ProjectStatus
+  category: string
+  status: string
   technologies: string | null
   tags: string | null
   coverImage: string | null

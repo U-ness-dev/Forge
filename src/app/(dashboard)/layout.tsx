@@ -1,11 +1,16 @@
-export default function DashboardLayout({
+import { auth } from "@/lib/auth"
+import { redirect } from "next/navigation"
+import AppShell from "@/components/layout/app-shell"
+
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return (
-    <div className="flex min-h-screen flex-col bg-zinc-50 dark:bg-black">
-      <main className="flex-1 flex flex-col">{children}</main>
-    </div>
-  )
+  const session = await auth()
+  if (!session?.user) {
+    redirect("/login")
+  }
+
+  return <AppShell>{children}</AppShell>
 }

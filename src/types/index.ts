@@ -1,13 +1,14 @@
-import type { ProjectStatus, ProjectCategory, ChatMode, TaskPriority } from "@prisma/client"
-
-export type { ProjectStatus, ProjectCategory, ChatMode, TaskPriority }
+export type ProjectStatus = "Idea" | "Research" | "Planning" | "Design" | "Development" | "Testing" | "Finished"
+export type ProjectCategory = "Website" | "MobileApp" | "DesktopApp" | "Branding" | "Logo" | "Game" | "BlenderProject" | "ThreeDScene" | "MotionDesign" | "Poster" | "Video" | "Animation" | "Other"
+export type ChatMode = "Brainstorm" | "Planning" | "Feedback" | "Reflection"
+export type TaskPriority = "Low" | "Medium" | "High" | "Critical"
 
 export interface ProjectWithRelations {
   id: string
   title: string
   description: string | null
-  category: ProjectCategory
-  status: ProjectStatus
+  category: string
+  status: string
   technologies: string | null
   tags: string | null
   coverImage: string | null
@@ -31,7 +32,7 @@ export interface TaskWithRelations {
   id: string
   title: string
   description: string | null
-  priority: TaskPriority
+  priority: string
   deadline: Date | null
   completed: boolean
   projectId: string
@@ -59,7 +60,7 @@ export interface TimelineEventWithRelations {
 export interface ChatWithRelations {
   id: string
   title: string | null
-  mode: ChatMode
+  mode: string
   projectId: string
   createdAt: Date
   updatedAt: Date
